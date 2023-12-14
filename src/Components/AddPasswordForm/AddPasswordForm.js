@@ -9,12 +9,14 @@ import {
   Box,
   IconButton,
   InputAdornment,
-  CircularProgress
+  CircularProgress,
+  LinearProgress
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../../firebase";
 import { collection, addDoc } from "firebase/firestore";
+import zxcvbn from "zxcvbn";
 
 const AddEntryForm = () => {
   const navigate = useNavigate();
@@ -38,6 +40,8 @@ const AddEntryForm = () => {
   const handleTogglePasswordVisibility = () => {
     setFormData({ ...formData, showPassword: !formData.showPassword });
   };
+
+  const passwordStrength = zxcvbn(formData.password);
 
   const handleSave = async () => {
     // Check if required fields are filled
@@ -163,6 +167,17 @@ const AddEntryForm = () => {
                 ),
               }}
             />
+            <LinearProgress
+              variant="determinate"
+              value={(passwordStrength.score / 4) * 100}
+              sx={{ height: 5, marginTop: 2 }}
+              color={
+                passwordStrength.score === 4 ? "success" : "error"
+              }
+            />
+            <Typography variant="caption" color="textSecondary" mt={1}>
+              {passwordStrength.feedback.suggestions.join(' ')}
+            </Typography>
             <TextField
               color="secondary"
               label="Comments"

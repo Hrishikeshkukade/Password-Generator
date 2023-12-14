@@ -10,11 +10,13 @@ import {
   CircularProgress,
   IconButton,
   InputAdornment,
+  LinearProgress
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import zxcvbn from "zxcvbn";
 
 const EditPasswordForm = () => {
   const { passwordId } = useParams();
@@ -29,6 +31,7 @@ const EditPasswordForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [requiredFieldsError, setRequiredFieldsError] = useState(false);
   const navigate = useNavigate();
+  const passwordStrength = zxcvbn(formData.password);
 
   useEffect(() => {
     const fetchPasswordDetails = async () => {
@@ -160,8 +163,19 @@ const EditPasswordForm = () => {
                       </InputAdornment>
                     ),
                   }}
+                  
                 />
-                
+                <LinearProgress
+              variant="determinate"
+              value={(passwordStrength.score / 4) * 100}
+              sx={{ height: 5, marginTop: 2 }}
+              color={
+                passwordStrength.score === 4 ? "success" : "error"
+              }
+            />
+            <Typography variant="caption" color="textSecondary" mt={1}>
+              {passwordStrength.feedback.suggestions}
+            </Typography>
               </Grid>
               {/* Add other input fields as needed */}
             </Grid>

@@ -132,14 +132,15 @@ const PasswordGenerator = () => {
   }, [location, navigate]);
 
   return (
-    <Grid container justifyContent="center" alignItems="center" height="100vh">
-      <Grid item xs={12} md={6}>
+    <Grid  container justifyContent="center" alignItems="center" height="100vh">
+      <Grid  item xs={12} md={6}>
         <Box
           p={4}
           boxShadow={3}
           marginTop="10%"
           borderRadius={4}
           bgcolor="white"
+          paddingBottom="50px"
         >
           <Typography variant="h4" align="center" gutterBottom>
             Password Generator
@@ -224,11 +225,12 @@ const PasswordGenerator = () => {
               label="Symbols"
             />
           </FormGroup>
-          <Box mt={4} sx={galaxyFold ? {height: "50px", flexDirection: "column"} : ""}  display="flex" justifyContent="space-between">
+          <Box mt={4}  sx={galaxyFold ? {height: "50px", flexDirection: "column"} : ""}  display="flex" justifyContent="space-between">
             <Button
               variant="contained"
               color="primary"
               onClick={handleGeneratePassword}
+              sx={{marginBottom: galaxyFold ? "10px" : ""}}
             >
               Generate Password
             </Button>
@@ -236,6 +238,7 @@ const PasswordGenerator = () => {
               variant="contained"
               color="secondary"
               onClick={handleResetPassword}
+              sx={{marginBottom: galaxyFold ? "10px" : ""}}
             >
               Reset Password
             </Button>
