@@ -20,21 +20,18 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { ToastContainer } from "react-toastify";
 import { CircularProgress } from "@mui/material";
 
-
-
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-
-  
-
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email("Invalid email address").required("Email is required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
     password: Yup.string().required("Password is required"),
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -43,65 +40,63 @@ export default function SignIn() {
       password: "",
     },
     validationSchema: validationSchema,
-  
-    onSubmit: async(values) => {
+
+    onSubmit: async (values) => {
       if (!values.email) {
         formik.setFieldError("email", "Please fill in this field");
       }
-    
+
       if (!values.password) {
         formik.setFieldError("password", "Please fill in this field");
       }
-    
+
       if (!values.email || !values.password) {
         console.log("Please fill in all fields");
         return;
       }
       if (values.password.length < 6) {
-        console.log('Password must be at least 6 characters long');
-        // Optionally, you can set an error state or display an error message
-        formik.setFieldError('password', 'Password must be at least 6 characters long');
+        console.log("Password must be at least 6 characters long");
+
+        formik.setFieldError(
+          "password",
+          "Password must be at least 6 characters long"
+        );
         return;
       }
       try {
-        setIsLoading(true); 
-        const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
+        setIsLoading(true);
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          values.email,
+          values.password
+        );
         const user = userCredential.user;
 
-        // You can now handle the signed-in user as needed
-        console.log('User signed in successfully:', user);
-       
+        console.log("User signed in successfully:", user);
+
         navigate("/passwordgenerator");
       } catch (error) {
-        console.error("Error")
-        if(error.code === "net::ERR_INTERNET_DISCONNECTED"){
-          toast.error('Network Problem')
-        }else if (error.code === "auth/user-not-found") {
+        console.error("Error");
+        if (error.code === "net::ERR_INTERNET_DISCONNECTED") {
+          toast.error("Network Problem");
+        } else if (error.code === "auth/user-not-found") {
           toast.error("User is not registered");
-        }else if (error.code === "auth/invalid-login-credentials") {
-          toast.error("User is not registered")
-        }else if (error.code === "auth/wrong-password") {
-          toast.error("Wrong password")
-        }  
-          else{
-
-          toast.error('Error signing in');
+        } else if (error.code === "auth/invalid-login-credentials") {
+          toast.error("User is not registered");
+        } else if (error.code === "auth/wrong-password") {
+          toast.error("Wrong password");
+        } else {
+          toast.error("Error signing in");
         }
-        // Optionally, you can set an error state or display an error message
-       
-      }finally{
+      } finally {
         setIsLoading(false);
       }
     },
-   
   });
-
-  
-  
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs" sx={{marginTop: "10%"}}>
+      <Container component="main" maxWidth="xs" sx={{ marginTop: "10%" }}>
         <CssBaseline />
         <Box
           sx={{
@@ -123,7 +118,6 @@ export default function SignIn() {
             noValidate
             sx={{ mt: 1 }}
           >
-            
             <TextField
               margin="normal"
               required
@@ -138,7 +132,6 @@ export default function SignIn() {
               onChange={formik.handleChange}
               error={formik.touched.email && Boolean(formik.errors.email)}
               helperText={formik.touched.email && formik.errors.email}
-              
             />
             <TextField
               margin="normal"
@@ -170,7 +163,11 @@ export default function SignIn() {
                 },
               }}
             >
-              {isLoading ? <CircularProgress color="secondary" size={25}/> : 'Sign In'}
+              {isLoading ? (
+                <CircularProgress color="secondary" size={25} />
+              ) : (
+                "Sign In"
+              )}
             </Button>
             <Grid container>
               <Grid item xs>
@@ -187,13 +184,13 @@ export default function SignIn() {
               <Grid item>
                 <Link
                   component={NavLink}
-                  to='/signup'
+                  to="/signup"
                   variant="body2"
                   underline="none"
                   color="secondary"
                   sx={{
                     "@media (max-width: 280px)": {
-                      marginLeft: "20px", // Adjust the font size as needed
+                      marginLeft: "20px",
                     },
                   }}
                 >
@@ -219,4 +216,3 @@ export default function SignIn() {
     </ThemeProvider>
   );
 }
-

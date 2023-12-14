@@ -10,24 +10,18 @@ import {
   Fab,
   CircularProgress,
   IconButton,
- Dialog,
- DialogTitle, 
- DialogContent, 
- DialogContentText, 
- DialogActions
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../../firebase";
-import {
-    collection,
-    where,
-    getDocs,
-    query,
-    
-  } from 'firebase/firestore';
+import { collection, where, getDocs, query } from "firebase/firestore";
 import { deleteDoc, doc } from "firebase/firestore";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 const ManagePasswords = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -41,39 +35,38 @@ const ManagePasswords = () => {
 
   useEffect(() => {
     const fetchTitleAndCategory = async () => {
-        try {
-          
-          if (user) {
-            // Query the Firestore collection for entries
-            const entriesQuery = query(
-              collection(db, 'entries'),
-              where('userId', '==', user.uid),
-            );
-      
-            // Get the documents that match the query
-            const querySnapshot = await getDocs(entriesQuery);
-      
-            // Extract title and category data from the documents
-            const titleAndCategoryData = [];
-            querySnapshot.forEach((doc) => {
-              titleAndCategoryData.push({
-                id: doc.id,
-                title: doc.data().title,
-                category: doc.data().category,
-              });
+      try {
+        if (user) {
+          // Query the Firestore collection for entries
+          const entriesQuery = query(
+            collection(db, "entries"),
+            where("userId", "==", user.uid)
+          );
+
+          // Get the documents that match the query
+          const querySnapshot = await getDocs(entriesQuery);
+
+          // Extract title and category data from the documents
+          const titleAndCategoryData = [];
+          querySnapshot.forEach((doc) => {
+            titleAndCategoryData.push({
+              id: doc.id,
+              title: doc.data().title,
+              category: doc.data().category,
             });
-      
-            // Update the state with the title and category data
-            setInfo(titleAndCategoryData);
-          }
-        } catch (error) {
-          console.error('Error fetching titles and categories:', error.message);
-        }finally {
-            // Set loading to false once the details are fetched (or failed to fetch)
-            setLoading(false);
-          }
-      };
-      fetchTitleAndCategory();
+          });
+
+          // Update the state with the title and category data
+          setInfo(titleAndCategoryData);
+        }
+      } catch (error) {
+        console.error("Error fetching titles and categories:", error.message);
+      } finally {
+        // Set loading to false once the details are fetched (or failed to fetch)
+        setLoading(false);
+      }
+    };
+    fetchTitleAndCategory();
   }, [user]);
 
   const handleSearchChange = (event) => {
@@ -84,13 +77,14 @@ const ManagePasswords = () => {
     const selectedValue = event.target.value;
 
     // If "Without Category" is selected, set the selected category to an empty string
-    const newSelectedCategory = selectedValue === "without category" ? "" : selectedValue;
+    const newSelectedCategory =
+      selectedValue === "without category" ? "" : selectedValue;
     setSelectedCategory(newSelectedCategory);
   };
 
   const handleAddEntry = () => {
     // Implement logic to navigate to the Add Entry page
-    navigate("/addpasswordform")
+    navigate("/addpasswordform");
     console.log("Add Entry clicked");
   };
 
@@ -108,7 +102,9 @@ const ManagePasswords = () => {
     try {
       setDeletingId(selectedPassword.id);
       await deleteDoc(doc(db, "entries", selectedPassword.id));
-      setInfo((prevInfo) => prevInfo.filter((info) => info.id !== selectedPassword.id));
+      setInfo((prevInfo) =>
+        prevInfo.filter((info) => info.id !== selectedPassword.id)
+      );
     } catch (error) {
       console.error("Error deleting password:", error.message);
     } finally {
@@ -124,11 +120,15 @@ const ManagePasswords = () => {
   };
 
   const filteredInfo = info.filter((info) => {
-    const matchesSearch = info.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = (selectedCategory === 'all') ||  (selectedCategory === 'category1' && !info.category) || info.category === selectedCategory;
+    const matchesSearch = info.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      selectedCategory === "all" ||
+      (selectedCategory === "category1" && !info.category) ||
+      info.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
-  
 
   return (
     <Container>
@@ -168,21 +168,29 @@ const ManagePasswords = () => {
               </Button>
             </Box>
             {loading ? (
-          <Box display="flex" justifyContent="center" alignItems="center" height="200px">
-            <CircularProgress color='secondary'/>
-          </Box>
-        ) : info.length === 0 ? (
-          <Typography variant="subtitle1" color="textSecondary">
-            No password added.
-          </Typography>) : (
-            filteredInfo.map((info) => (
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="200px"
+              >
+                <CircularProgress color="secondary" />
+              </Box>
+            ) : info.length === 0 ? (
+              <Typography variant="subtitle1" color="textSecondary">
+                No password added.
+              </Typography>
+            ) : (
+              filteredInfo.map((info) => (
                 <Paper
                   key={info.id}
                   elevation={3}
-                  sx={{ padding: 3, marginTop: 2, cursor: 'pointer' }}
+                  sx={{ padding: 3, marginTop: 2, cursor: "pointer" }}
                   onClick={() => handlePasswordDetails(info.id)}
                 >
-                  <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
                     <div>
                       <Typography variant="h6">{info.title}</Typography>
                       <Typography variant="subtitle1" color="textSecondary">
@@ -195,22 +203,24 @@ const ManagePasswords = () => {
                       onClick={(e) => {
                         // Avoid triggering Paper's click event
                         e.stopPropagation();
-                       handleDelete(info.id)
+                        handleDelete(info.id);
                       }}
                     >
-                {deletingId === info.id ? <CircularProgress size={24} color="secondary"/> : <DeleteIcon />}
+                      {deletingId === info.id ? (
+                        <CircularProgress size={24} color="secondary" />
+                      ) : (
+                        <DeleteIcon />
+                      )}
                     </IconButton>
                   </Box>
                 </Paper>
-                
               ))
-        )}
-            
+            )}
           </Paper>
         </Grid>
       </Grid>
       <Box sx={{ position: "fixed", bottom: 16, right: 16 }}>
-        <Fab color='secondary'  onClick={handleAddEntry}>
+        <Fab color="secondary" onClick={handleAddEntry}>
           <AddIcon />
         </Fab>
       </Box>
@@ -220,9 +230,7 @@ const ManagePasswords = () => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {"Confirm Delete"}
-        </DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Confirm Delete"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Are you sure you want to delete the password entry for{" "}

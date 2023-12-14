@@ -17,8 +17,14 @@ import Button from "@mui/material/Button";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
 import { signOut } from "firebase/auth";
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -59,18 +65,18 @@ function DrawerAppBar(props) {
   };
   // useEffect(() => {
   //   const storedUser = JSON.parse(localStorage.getItem("authUser"));
-  
+
   //   if (storedUser) {
   //     setUser(storedUser);
   //   }
-  
+
   //   const unsubscribe = onAuthStateChanged(auth, (authUser) => {
   //     setUser(authUser);
-  
+
   //     // Save user to local storage
   //     localStorage.setItem("authUser", JSON.stringify(authUser));
   //   });
-  
+
   //   return () => {
   //     localStorage.removeItem("authUser");
   //     unsubscribe();
@@ -88,23 +94,10 @@ function DrawerAppBar(props) {
     };
   }, []);
 
-
-  // const handleLogout = async () => {
-  //   try {
-  //     if (auth) {
-  //       await signOut(auth);
-  //       setUser(null);
-  //       navigate("/");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error during logout:", error);
-  //   }
-  // };
-
   const isLoggedIn = auth.currentUser !== null;
 
   if (loading) {
-    return null; // or a loading spinner
+    return null;
   }
 
   const navItems = isLoggedIn
@@ -112,7 +105,6 @@ function DrawerAppBar(props) {
         { label: "Generate Password", path: "/passwordgenerator" },
         { label: "Manage Passwords", path: "/managepasswords" },
         { label: "Profile", path: "/profile" },
-        
       ]
     : [
         { label: "Signin", path: "/" },
@@ -138,46 +130,42 @@ function DrawerAppBar(props) {
                   bgcolor: "secondary.main",
                 },
                 textDecoration: "none",
-              
+
                 bgcolor:
                   location.pathname === item.path
                     ? "secondary.main"
                     : "inherit",
               }}
             >
-              
               <ListItemText primary={item.label} />
             </ListItemButton>
           </ListItem>
         ))}
-        {isLoggedIn && 
-              <Button
-              
-              component={NavLink}
-              onClick={handleLogout}
-              color="inherit"
-              sx={{
-                bgcolor: "red",
-                "&:hover": {
-                  bgcolor: "#b23b3b"
-                },
-                width: "100%",
-                height: "7vh",
-                borderRadius: "0px"
-              }}
-              
-              startIcon={<LogoutOutlinedIcon />}
-            >
-              Logout
-            </Button>
-            }
+        {isLoggedIn && (
+          <Button
+            component={NavLink}
+            onClick={handleLogout}
+            color="inherit"
+            sx={{
+              bgcolor: "red",
+              "&:hover": {
+                bgcolor: "#b23b3b",
+              },
+              width: "100%",
+              height: "7vh",
+              borderRadius: "0px",
+            }}
+            startIcon={<LogoutOutlinedIcon />}
+          >
+            Logout
+          </Button>
+        )}
       </List>
     </Box>
   );
 
   const container =
     window !== undefined ? () => window().document.body : undefined;
-    
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -212,31 +200,27 @@ function DrawerAppBar(props) {
                   bgcolor:
                     location.pathname === item.path ? "#BF40BF" : "inherit",
                   margin: "10px",
-                
                 }}
               >
                 {item.label}
               </Button>
             ))}
-            {isLoggedIn && 
+            {isLoggedIn && (
               <Button
-              
-              component={NavLink}
-              onClick={handleLogout}
-              color="inherit"
-              sx={{
-                bgcolor: "red",
-                "&:hover": {
-                  bgcolor: "#b23b3b"
-                },
-              }}
-              
-              startIcon={<LogoutOutlinedIcon />}
-            >
-              Logout
-            </Button>
-            }
-            
+                component={NavLink}
+                onClick={handleLogout}
+                color="inherit"
+                sx={{
+                  bgcolor: "red",
+                  "&:hover": {
+                    bgcolor: "#b23b3b",
+                  },
+                }}
+                startIcon={<LogoutOutlinedIcon />}
+              >
+                Logout
+              </Button>
+            )}
           </Box>
         </Toolbar>
       </AppBar>
@@ -284,10 +268,6 @@ function DrawerAppBar(props) {
 }
 
 DrawerAppBar.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
   window: PropTypes.func,
   authenticatedUser: PropTypes.object,
 };

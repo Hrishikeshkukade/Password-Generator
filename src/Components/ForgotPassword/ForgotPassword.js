@@ -14,7 +14,6 @@ import { useFormik } from "formik";
 
 const defaultTheme = createTheme();
 
-
 export default function ForgotPassword() {
   const validationSchema = Yup.object().shape({
     email: Yup.string()

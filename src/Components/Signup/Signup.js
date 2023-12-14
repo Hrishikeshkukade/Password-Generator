@@ -72,20 +72,20 @@ export default function Signup() {
         setIsLoading(true);
         const userCredential = await createUserWithEmailAndPassword(
           auth,
-          
+
           values.email,
           values.password
         );
         const user = userCredential.user;
         updateProfile(user, {
           displayName: values.name,
-        }).then(() => {
-          // Profile updated!
-          // ...
-        }).catch((error) => {
-          // An error occurred
-          // ...
-        });
+        })
+          .then(() => {
+            // Profile Updated
+          })
+          .catch((error) => {
+            // An error occurred
+          });
         navigate("/passwordgenerator");
         // Store additional user data in Firestore
 
@@ -95,17 +95,9 @@ export default function Signup() {
           email: values.email,
           userId: user.uid,
         };
-        
+
         await addDoc(userRef, newUser);
-        toast.success(
-          "User signed up successfully!"
-        );
-      
-        
-        
-        
-        
-        
+        toast.success("User signed up successfully!");
       } catch (error) {
         console.error("Error signing up:", error.message);
 
@@ -114,17 +106,16 @@ export default function Signup() {
         } else {
           toast.error("Error signing up. Please try again.");
         }
-      }finally{
+      } finally {
         setIsLoading(false);
         resetForm();
       }
     },
   });
-  
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs" sx={{marginTop: '10%'}}>
+      <Container component="main" maxWidth="xs" sx={{ marginTop: "10%" }}>
         <CssBaseline />
 
         <Box
@@ -208,7 +199,11 @@ export default function Signup() {
                 },
               }}
             >
-              {isLoading ? <CircularProgress color="secondary" size={25}/> : "Sign Up"}
+              {isLoading ? (
+                <CircularProgress color="secondary" size={25} />
+              ) : (
+                "Sign Up"
+              )}
             </Button>
             <Grid item>
               <Link
