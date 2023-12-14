@@ -6,18 +6,26 @@ import {
   Box,
   CircularProgress,
   Fab,
+  IconButton,
+  Snackbar,
+  useMediaQuery,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { collection, doc, getDoc } from "firebase/firestore";
+import {  doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
-import { Edit } from "@mui/icons-material";
+import { Edit, FileCopy as FileCopyIcon } from "@mui/icons-material";
 
 const PasswordDetails = () => {
   const { passwordId } = useParams();
   const [passwordDetails, setPasswordDetails] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [copyField, setCopyField] = useState(""); // To track which field to copy
   const navigate = useNavigate();
+  const mobileDevice = useMediaQuery("(max-width: 820px)");
+
+
 
   useEffect(() => {
     const fetchPasswordDetails = async () => {
@@ -54,9 +62,18 @@ const PasswordDetails = () => {
     navigate(`/editpasswordform/${passwordId}`);
   };
 
+  const handleCopy = (value) => {
+    navigator.clipboard.writeText(value);
+    setOpenSnackbar(true);
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
+
   return (
     <Container>
-      <Paper elevation={3} sx={{ padding: 3, marginTop: "10%" }}>
+      <Paper  elevation={3} sx={{ padding: 3, marginTop: mobileDevice ? "20%" :  "12%" }}>
         {loading ? (
           <Box
             display="flex"
@@ -75,10 +92,33 @@ const PasswordDetails = () => {
               Category: {passwordDetails?.category || "Category Not Found"}
             </Typography>
             <Typography variant="subtitle1" color="textSecondary" gutterBottom>
-              Username: {passwordDetails?.username || "Username Not Found"}
+              Username: {passwordDetails?.username || "Username Not Found"}{" "}
+              <IconButton
+                color="secondary"
+                size="small"
+                onClick={() => {
+                  handleCopy(passwordDetails?.username || "");
+                  setCopyField("username");
+                }}
+              >
+                <FileCopyIcon />
+              </IconButton>
             </Typography>
             <Typography variant="subtitle1" color="textSecondary" gutterBottom>
-              Password: {passwordDetails?.password || "Password Not Found"}
+              Password: {passwordDetails?.password || "Password Not Found"}{" "}
+              <IconButton
+                color="secondary"
+                size="small"
+                onClick={() => {
+                  handleCopy(passwordDetails?.password || "");
+                  setCopyField("password");
+                }}
+              >
+                <FileCopyIcon />
+              </IconButton>
+            </Typography>
+            <Typography variant="subtitle1" color="textSecondary" gutterBottom>
+              Comments: {passwordDetails?.comments || "Comments Not Found"}
             </Typography>
             {/* Add other details as needed */}
           </>
@@ -92,8 +132,15 @@ const PasswordDetails = () => {
           <Edit />
         </Fab>
       </Paper>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        message={`Copied ${copyField.charAt(0).toUpperCase() + copyField.slice(1)}`}
+      />
     </Container>
   );
 };
 
 export default PasswordDetails;
+

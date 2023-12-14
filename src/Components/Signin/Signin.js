@@ -77,17 +77,18 @@ export default function SignIn() {
         navigate("/passwordgenerator");
       } catch (error) {
         console.error("Error");
-        if (error.code === "net::ERR_INTERNET_DISCONNECTED") {
+        if (error.code === "auth/user-not-found") {
+          toast.error("User is not registered");
+        } else if (error.code === "auth/network-request-failed") {
           toast.error("Network Problem");
-        } else if (error.code === "auth/user-not-found") {
-          toast.error("User is not registered");
         } else if (error.code === "auth/invalid-login-credentials") {
-          toast.error("User is not registered");
+          toast.error("Incorrect Email or Password");
         } else if (error.code === "auth/wrong-password") {
           toast.error("Wrong password");
-        } else {
-          toast.error("Error signing in");
         }
+        else {
+          toast.error("Error signing in");
+        } 
       } finally {
         setIsLoading(false);
       }
@@ -189,8 +190,9 @@ export default function SignIn() {
                   underline="none"
                   color="secondary"
                   sx={{
-                    "@media (max-width: 280px)": {
-                      marginLeft: "20px",
+                    "@media (max-width: 320px)": {
+                      marginLeft: "40px",
+                      
                     },
                   }}
                 >
@@ -200,8 +202,7 @@ export default function SignIn() {
             </Grid>
           </Box>
         </Box>
-      </Container>
-      <ToastContainer
+        <ToastContainer
         position="top-center"
         autoClose={5000}
         hideProgressBar={false}
@@ -213,6 +214,8 @@ export default function SignIn() {
         pauseOnHover
         theme="light"
       />
+      </Container>
+   
     </ThemeProvider>
   );
 }

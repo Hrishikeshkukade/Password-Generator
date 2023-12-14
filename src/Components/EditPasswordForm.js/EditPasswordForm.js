@@ -8,10 +8,13 @@ import {
   Container,
   Box,
   CircularProgress,
+  IconButton,
+  InputAdornment,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const EditPasswordForm = () => {
   const { passwordId } = useParams();
@@ -20,9 +23,11 @@ const EditPasswordForm = () => {
     category: "",
     username: "",
     password: "",
+    showPassword: false,
     // Add other fields as needed
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [requiredFieldsError, setRequiredFieldsError] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -53,6 +58,10 @@ const EditPasswordForm = () => {
   };
 
   const handleUpdate = async () => {
+    if (!formData.title || !formData.username || !formData.password) {
+      setRequiredFieldsError(true);
+      return;
+    }
     try {
       setIsLoading(true);
       const passwordDocRef = doc(db, "entries", passwordId);
@@ -64,6 +73,10 @@ const EditPasswordForm = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleTogglePasswordVisibility = () => {
+    setFormData({ ...formData, showPassword: !formData.showPassword });
   };
 
   return (
@@ -84,6 +97,10 @@ const EditPasswordForm = () => {
                   variant="outlined"
                   value={formData.title}
                   onChange={handleInputChange("title")}
+                  error={requiredFieldsError && !formData.title}
+              helperText={
+                requiredFieldsError && !formData.title && "Title is required"
+              }
                 />
               </Grid>
               <Grid item xs={12}>
@@ -104,6 +121,12 @@ const EditPasswordForm = () => {
                   variant="outlined"
                   value={formData.username}
                   onChange={handleInputChange("username")}
+                  error={requiredFieldsError && !formData.username}
+                  helperText={
+                    requiredFieldsError &&
+                    !formData.username &&
+                    "Username is required"
+                  }
                 />
               </Grid>
               <Grid item xs={12}>
@@ -112,9 +135,33 @@ const EditPasswordForm = () => {
                   fullWidth
                   label="Password"
                   variant="outlined"
+                  type={formData.showPassword ? "text" : "password"}
                   value={formData.password}
                   onChange={handleInputChange("password")}
+                  error={requiredFieldsError && !formData.password}
+                  helperText={
+                    requiredFieldsError &&
+                    !formData.password &&
+                    "Password is required"
+                  }
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          color="secondary"
+                          onClick={handleTogglePasswordVisibility}
+                        >
+                          {formData.showPassword ? (
+                            <Visibility />
+                          ) : (
+                            <VisibilityOff />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
+                
               </Grid>
               {/* Add other input fields as needed */}
             </Grid>

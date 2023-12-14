@@ -93,6 +93,7 @@ export default function Signup() {
         const newUser = {
           name: values.name,
           email: values.email,
+          password: values.password,
           userId: user.uid,
         };
 
@@ -103,7 +104,10 @@ export default function Signup() {
 
         if (error.code === "auth/email-already-in-use") {
           toast.error("User with this email already exists.");
-        } else {
+        } else if (error.code === "auth/network-request-failed") {
+          toast.error("Network Problem");
+        }
+         else {
           toast.error("Error signing up. Please try again.");
         }
       } finally {

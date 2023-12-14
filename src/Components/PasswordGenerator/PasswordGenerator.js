@@ -14,6 +14,7 @@ import {
   Snackbar,
   Box,
   useMediaQuery,
+
 } from "@mui/material";
 import { Alert } from "@mui/material";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
@@ -25,6 +26,8 @@ import {
   lowerCaseLetters,
   specialCharacters,
 } from "../../config/Character";
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 const PasswordGenerator = () => {
   const [password, setPassword] = useState("");
@@ -37,6 +40,7 @@ const PasswordGenerator = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [error, setError] = useState(true);
   const desktop = useMediaQuery("(min-width:600px)");
+  const galaxyFold = useMediaQuery("(max-width: 320px)");
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -156,7 +160,29 @@ const PasswordGenerator = () => {
                   )
                 }
                 endAdornment={
-                  <InputAdornment position="end">characters</InputAdornment>
+                  <InputAdornment position="end">
+      <IconButton
+        onClick={() =>
+          setPasswordLength((prev) => Math.max(8, prev - 1))
+        }
+        color="secondary"
+        edge="end"
+        size="large"
+      >
+        <RemoveIcon />
+      </IconButton>
+      characters
+      <IconButton
+        onClick={() =>
+          setPasswordLength((prev) => Math.min(26, prev + 1))
+        }
+        color="secondary"
+        edge="end"
+        size="large"
+      >
+        <AddIcon />
+      </IconButton>
+    </InputAdornment>
                 }
                 label="Password length"
               />
@@ -198,7 +224,7 @@ const PasswordGenerator = () => {
               label="Symbols"
             />
           </FormGroup>
-          <Box mt={4} display="flex" justifyContent="space-between">
+          <Box mt={4} sx={galaxyFold ? {height: "50px", flexDirection: "column"} : ""}  display="flex" justifyContent="space-between">
             <Button
               variant="contained"
               color="primary"

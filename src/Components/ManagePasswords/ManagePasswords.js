@@ -78,8 +78,9 @@ const ManagePasswords = () => {
 
     // If "Without Category" is selected, set the selected category to an empty string
     const newSelectedCategory =
-      selectedValue === "without category" ? "" : selectedValue;
+      selectedValue === "without category" ? "all" : selectedValue;
     setSelectedCategory(newSelectedCategory);
+    console.log("clicked");
   };
 
   const handleAddEntry = () => {
@@ -119,20 +120,24 @@ const ManagePasswords = () => {
     setOpenDeleteDialog(false);
   };
 
-  const filteredInfo = info.filter((info) => {
-    const matchesSearch = info.title
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "all" ||
-      (selectedCategory === "category1" && !info.category) ||
-      info.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+  const filteredInfo = info.filter((item) => {
+    const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    if (selectedCategory === 'all') {
+      return matchesSearch;
+    }
+  
+    if (selectedCategory === 'without category') {
+      return matchesSearch && !item.category ;
+    }
+  
+    return matchesSearch && item.category === selectedCategory;
   });
+  
 
   return (
-    <Container>
-      <Grid container spacing={3} marginTop="10%" justifyContent="center">
+    <Container >
+      <Grid container spacing={3} marginTop={10}  justifyContent="center">
         <Grid item xs={12} md={8}>
           <Paper elevation={3} sx={{ padding: 3 }}>
             <Typography variant="h4" gutterBottom>
@@ -141,13 +146,14 @@ const ManagePasswords = () => {
             <TextField
               color="secondary"
               label="Search"
+              autoComplete="false"
               variant="outlined"
               fullWidth
               margin="normal"
               value={searchTerm}
               onChange={handleSearchChange}
             />
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            {/* <Box sx={{ display: "flex", alignItems: "center" }}>
               <TextField
                 color="secondary"
                 select
@@ -158,15 +164,15 @@ const ManagePasswords = () => {
                 onChange={handleCategoryChange}
                 sx={{ width: "50%" }}
               >
-                <option value="all">All Categories</option>
-                {/* Add your categories dynamically here */}
-                <option value="without category">Without Category</option>
-                {/* <option value="category2"></option> */}
+                <option  value="all">All Categories</option>
+                
+                <option   value="without category">Without Category</option>
+               
               </TextField>
               <Button color="secondary" variant="contained" sx={{ ml: 2 }}>
                 Apply
               </Button>
-            </Box>
+            </Box> */}
             {loading ? (
               <Box
                 display="flex"

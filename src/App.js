@@ -16,6 +16,7 @@ import AddPasswordForm from "./Components/AddPasswordForm/AddPasswordForm";
 import PasswordDetails from "./Components/PasswordDetails/PasswordDetails";
 import EditPasswordForm from "./Components/EditPasswordForm.js/EditPasswordForm";
 
+
 function App() {
   const user = useAuth();
   const [authenticatedUser, setAuthenticatedUser] = useState(null);
@@ -80,6 +81,12 @@ function App() {
             element={<ProtectedRoute element={<EditPasswordForm />} />}
           />
         )}
+           {/* {user && (
+          <Route
+            path="/updateprofileform"
+            element={<ProtectedRoute element={<UpdateProfile/>} />}
+          />
+        )} */}
       </Routes>
       <Navbar />
     </div>
