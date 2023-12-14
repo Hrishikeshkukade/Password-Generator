@@ -27,6 +27,7 @@ const EditPasswordForm = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    
     const fetchPasswordDetails = async () => {
       try {
         const passwordDocRef = doc(db, 'entries', passwordId);

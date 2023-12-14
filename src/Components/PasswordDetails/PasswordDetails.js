@@ -84,6 +84,7 @@ const PasswordDetails = () => {
       </Paper>
     </Container>
   );
+  
 };
 
 export default PasswordDetails;

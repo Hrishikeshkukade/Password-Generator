@@ -46,6 +46,7 @@ const AddEntryForm = () => {
       return;
     }
     try {
+      
       // Get the currently signed-in user
       setIsLoading(true);
       const user = auth.currentUser;

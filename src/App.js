@@ -40,6 +40,7 @@ function App() {
       return <Navigate to="/" />;
     }
   };
+  
 
   return (
     <div className="App">

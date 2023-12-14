@@ -117,6 +117,7 @@ const PasswordGenerator = () => {
       window.removeEventListener('popstate', handleBackButton);
     };
   }, [location, navigate]);
+  
 
   return (
   

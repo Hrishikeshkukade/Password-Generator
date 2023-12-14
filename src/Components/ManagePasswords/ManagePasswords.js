@@ -128,6 +128,7 @@ const ManagePasswords = () => {
     const matchesCategory = (selectedCategory === 'all') ||  (selectedCategory === 'category1' && !info.category) || info.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
+  
 
   return (
     <Container>
