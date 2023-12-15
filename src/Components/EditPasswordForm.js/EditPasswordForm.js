@@ -91,7 +91,7 @@ const EditPasswordForm = () => {
               Update Information
             </Typography>
             <Grid container spacing={2}>
-              {/* Add other input fields as needed */}
+             
               <Grid item xs={12}>
                 <TextField
                   color="secondary"

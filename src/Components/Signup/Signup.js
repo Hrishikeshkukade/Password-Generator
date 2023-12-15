@@ -18,6 +18,8 @@ import { CircularProgress, Grid, Link } from "@mui/material";
 import { NavLink, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {IconButton, InputAdornment} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const defaultTheme = createTheme();
 
@@ -38,6 +40,7 @@ export default function Signup() {
       name: "",
       email: "",
       password: "",
+      showPassword: false,
     },
     validationSchema: validationSchema,
 
@@ -117,6 +120,11 @@ export default function Signup() {
     },
   });
 
+  const handleTogglePasswordVisibility = () => {
+    // Toggle the value of showPassword
+    formik.setFieldValue('showPassword', !formik.values.showPassword);
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs" sx={{ marginTop: "10%" }}>
@@ -179,7 +187,7 @@ export default function Signup() {
               fullWidth
               name="password"
               label="Password"
-              type="password"
+              type={formik.values.showPassword ? 'text' : 'password'}
               id="password"
               autoComplete="current-password"
               color="secondary"
@@ -187,6 +195,22 @@ export default function Signup() {
               onChange={formik.handleChange}
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      color="secondary"
+                      onClick={handleTogglePasswordVisibility}
+                    >
+                      {formik.values.showPassword ? (
+                        <Visibility />
+                      ) : (
+                        <VisibilityOff />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
 
             <Button
