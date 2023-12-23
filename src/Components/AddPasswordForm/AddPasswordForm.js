@@ -10,13 +10,16 @@ import {
   IconButton,
   InputAdornment,
   CircularProgress,
-  LinearProgress
+  LinearProgress,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../../firebase";
 import { collection, addDoc } from "firebase/firestore";
 import zxcvbn from "zxcvbn";
+import {  AES } from 'crypto-js';
+
+
 
 const AddEntryForm = () => {
   const navigate = useNavigate();
@@ -50,13 +53,14 @@ const AddEntryForm = () => {
       return;
     }
     try {
-      
       // Get the currently signed-in user
       setIsLoading(true);
       const user = auth.currentUser;
 
       // Check if the user is signed in
       if (user) {
+        const encryptedPassword = AES.encrypt(formData.password, 'your-secret-key').toString();
+    
         // Save data to Firestore
         const userRef = collection(db, "entries");
         const userInfo = {
@@ -64,22 +68,19 @@ const AddEntryForm = () => {
           title: formData.title,
           category: formData.category,
           username: formData.username,
-          password: formData.password,
+          password: encryptedPassword,
           comments: formData.comments,
-          
         };
 
         await addDoc(userRef, userInfo);
-
-        
 
         // Redirect user after saving
         navigate("/managepasswords");
       }
     } catch (error) {
       console.error("Error saving data to Firestore:", error.message);
-    }finally{
-      setIsLoading(false)
+    } finally {
+      setIsLoading(false);
     }
     // Implement save logic here
     console.log("Form Data:", formData);
@@ -171,12 +172,10 @@ const AddEntryForm = () => {
               variant="determinate"
               value={(passwordStrength.score / 4) * 100}
               sx={{ height: 5, marginTop: 2 }}
-              color={
-                passwordStrength.score === 4 ? "success" : "error"
-              }
+              color={passwordStrength.score === 4 ? "success" : "error"}
             />
             <Typography variant="caption" color="textSecondary" mt={1}>
-              {passwordStrength.feedback.suggestions.join(' ')}
+              {passwordStrength.feedback.suggestions.join(" ")}
             </Typography>
             <TextField
               color="secondary"
@@ -198,7 +197,11 @@ const AddEntryForm = () => {
                 color="secondary"
                 onClick={handleSave}
               >
-                {isLoading ? <CircularProgress color="secondary" size={25}/> : 'Save'}
+                {isLoading ? (
+                  <CircularProgress color="secondary" size={25} />
+                ) : (
+                  "Save"
+                )}
               </Button>
             </Box>
           </Paper>

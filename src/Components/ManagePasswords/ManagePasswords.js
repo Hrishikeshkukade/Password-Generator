@@ -20,8 +20,11 @@ import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../../firebase";
 import { collection, where, getDocs, query } from "firebase/firestore";
+import { toast } from "react-toastify";
 import { deleteDoc, doc } from "firebase/firestore";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { ToastContainer } from "react-toastify";
+
 const ManagePasswords = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -60,7 +63,7 @@ const ManagePasswords = () => {
           setInfo(titleAndCategoryData);
         }
       } catch (error) {
-        console.error("Error fetching titles and categories:", error.message);
+        toast.error("Error fetching data:");
       } finally {
         // Set loading to false once the details are fetched (or failed to fetch)
         setLoading(false);
@@ -121,23 +124,24 @@ const ManagePasswords = () => {
   };
 
   const filteredInfo = info.filter((item) => {
-    const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    if (selectedCategory === 'all') {
+    const matchesSearch = item.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+
+    if (selectedCategory === "all") {
       return matchesSearch;
     }
-  
-    if (selectedCategory === 'without category') {
-      return matchesSearch && !item.category ;
+
+    if (selectedCategory === "without category") {
+      return matchesSearch && !item.category;
     }
-  
+
     return matchesSearch && item.category === selectedCategory;
   });
-  
 
   return (
-    <Container >
-      <Grid container spacing={3} marginTop={10}  justifyContent="center">
+    <Container>
+      <Grid container spacing={3} marginTop={10} justifyContent="center">
         <Grid item xs={12} md={8}>
           <Paper elevation={3} sx={{ padding: 3 }}>
             <Typography variant="h4" gutterBottom>
@@ -252,6 +256,18 @@ const ManagePasswords = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </Container>
   );
 };

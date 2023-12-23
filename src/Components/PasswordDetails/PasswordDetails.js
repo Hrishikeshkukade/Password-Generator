@@ -13,8 +13,11 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import {  doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
-
+import { toast} from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { Edit, FileCopy as FileCopyIcon } from "@mui/icons-material";
+import { enc, AES } from "crypto-js/core";
+
 
 const PasswordDetails = () => {
   const { passwordId } = useParams();
@@ -40,13 +43,16 @@ const PasswordDetails = () => {
         if (passwordDocSnapshot.exists()) {
           // Extract details from the document data
           const details = passwordDocSnapshot.data();
-          setPasswordDetails(details);
+         // Decrypt the password for display (optional)
+        const decryptedPassword = AES.decrypt( details.password,'your-secret-key').toString(enc.Utf8);
+
+          setPasswordDetails({...details,password: decryptedPassword});
         } else {
           // Handle the case where the document does not exist
           console.error("Password details not found");
         }
       } catch (error) {
-        console.error("Error fetching password details:", error.message);
+        toast.error("Error fetching data");
       } finally {
         // Set loading to false once the details are fetched (or failed to fetch)
         setLoading(false);
@@ -120,7 +126,7 @@ const PasswordDetails = () => {
             <Typography variant="subtitle1" color="textSecondary" gutterBottom>
               Comments: {passwordDetails?.comments || "Comments Not Found"}
             </Typography>
-            {/* Add other details as needed */}
+            
           </>
         )}
         <Fab
@@ -137,6 +143,18 @@ const PasswordDetails = () => {
         autoHideDuration={3000}
         onClose={handleCloseSnackbar}
         message={`Copied ${copyField.charAt(0).toUpperCase() + copyField.slice(1)}`}
+      />
+        <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
       />
     </Container>
   );
