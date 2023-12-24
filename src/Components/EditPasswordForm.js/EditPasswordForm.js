@@ -17,6 +17,7 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import zxcvbn from "zxcvbn";
+import { enc, AES } from "crypto-js/core";
 
 const EditPasswordForm = () => {
   const { passwordId } = useParams();
@@ -41,7 +42,8 @@ const EditPasswordForm = () => {
 
         if (passwordDocSnapshot.exists()) {
           const details = passwordDocSnapshot.data();
-          setFormData(details);
+          const decryptedPassword = AES.decrypt( details.password,'your-secret-key').toString(enc.Utf8);
+          setFormData({...details,password: decryptedPassword});
         } else {
           console.error("Password details not found");
         }
