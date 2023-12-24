@@ -69,8 +69,14 @@ const EditPasswordForm = () => {
     }
     try {
       setIsLoading(true);
+      const encryptedPassword = AES.encrypt(formData.password, 'your-secret-key').toString();
+      const updatedFormData = {
+        ...formData,
+        password: encryptedPassword,
+      };
       const passwordDocRef = doc(db, "entries", passwordId);
-      await updateDoc(passwordDocRef, formData);
+      
+      await updateDoc(passwordDocRef, updatedFormData);
       // Redirect to the manage passwords page
       navigate("/managepasswords");
     } catch (error) {

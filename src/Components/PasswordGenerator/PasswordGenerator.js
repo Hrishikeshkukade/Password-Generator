@@ -228,7 +228,7 @@ const PasswordGenerator = () => {
           <Box mt={4}  sx={galaxyFold ? {height: "50px", flexDirection: "column"} : ""}  display="flex" justifyContent="space-between">
             <Button
               variant="contained"
-              color="primary"
+              color="secondary"
               onClick={handleGeneratePassword}
               sx={{marginBottom: galaxyFold ? "10px" : ""}}
             >
@@ -236,7 +236,7 @@ const PasswordGenerator = () => {
             </Button>
             <Button
               variant="contained"
-              color="secondary"
+              color="error"
               onClick={handleResetPassword}
               sx={{marginBottom: galaxyFold ? "10px" : ""}}
             >
