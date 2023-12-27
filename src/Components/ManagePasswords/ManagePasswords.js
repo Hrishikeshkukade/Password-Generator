@@ -15,6 +15,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  MenuItem,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
@@ -33,6 +34,8 @@ const ManagePasswords = () => {
   const [deletingId, setDeletingId] = useState(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedPassword, setSelectedPassword] = useState(null);
+  const [sortBy, setSortBy] = useState("title");
+  const [sortOrder, setSortOrder] = useState("asc");
   const navigate = useNavigate();
   const user = auth.currentUser;
 
@@ -84,6 +87,11 @@ const ManagePasswords = () => {
       selectedValue === "without category" ? "all" : selectedValue;
     setSelectedCategory(newSelectedCategory);
     console.log("clicked");
+  };
+
+  const handleSortChange = (event) => {
+    const newSortBy = event.target.value;
+    setSortBy(newSortBy);
   };
 
   const handleAddEntry = () => {
@@ -139,6 +147,17 @@ const ManagePasswords = () => {
     return matchesSearch && item.category === selectedCategory;
   });
 
+  const sortedInfo = [...filteredInfo].sort((a, b) => {
+    const aValue = sortBy === "title" ? a.title : a.category;
+    const bValue = sortBy === "title" ? b.title : b.category;
+
+    if (sortOrder === "asc") {
+      return aValue.localeCompare(bValue);
+    } else {
+      return bValue.localeCompare(aValue);
+    }
+  });
+
   return (
     <Container>
       <Grid container spacing={3} marginTop={10} justifyContent="center">
@@ -157,26 +176,22 @@ const ManagePasswords = () => {
               value={searchTerm}
               onChange={handleSearchChange}
             />
-            {/* <Box sx={{ display: "flex", alignItems: "center" }}>
-              <TextField
-                color="secondary"
-                select
-                label="All Categories"
-                variant="outlined"
-                margin="normal"
-                value={selectedCategory}
-                onChange={handleCategoryChange}
-                sx={{ width: "50%" }}
-              >
-                <option  value="all">All Categories</option>
-                
-                <option   value="without category">Without Category</option>
-               
-              </TextField>
-              <Button color="secondary" variant="contained" sx={{ ml: 2 }}>
-                Apply
-              </Button>
-            </Box> */}
+
+            <TextField
+              color="secondary"
+              select
+              label="Sort By"
+              variant="outlined"
+              margin="normal"
+              value={sortBy}
+              onChange={handleSortChange}
+              sx={{ width: "50%" }}
+            >
+              {/* <option value="title">Title</option>
+              <option value="category">Category</option> */}
+              <MenuItem value="title">Title</MenuItem>
+              <MenuItem value="category">Category</MenuItem>
+            </TextField>
             {loading ? (
               <Box
                 display="flex"
@@ -186,12 +201,12 @@ const ManagePasswords = () => {
               >
                 <CircularProgress color="secondary" />
               </Box>
-            ) : info.length === 0 ? (
+            ) : sortedInfo.length === 0 ? (
               <Typography variant="subtitle1" color="textSecondary">
                 No password added.
               </Typography>
             ) : (
-              filteredInfo.map((info) => (
+              sortedInfo.map((info) => (
                 <Paper
                   key={info.id}
                   elevation={3}
@@ -271,5 +286,4 @@ const ManagePasswords = () => {
     </Container>
   );
 };
-
 export default ManagePasswords;

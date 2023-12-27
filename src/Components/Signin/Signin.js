@@ -70,12 +70,14 @@ export default function SignIn() {
       }
       try {
         setIsLoading(true);
+        
         const userCredential = await signInWithEmailAndPassword(
           auth,
           values.email,
           values.password
         );
         const user = userCredential.user;
+       
 
         console.log("User signed in successfully:", user);
 

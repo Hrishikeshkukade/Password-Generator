@@ -18,6 +18,7 @@ import { auth, db } from "../../firebase";
 import { collection, addDoc } from "firebase/firestore";
 import zxcvbn from "zxcvbn";
 import {  AES } from 'crypto-js';
+import { serverTimestamp } from "firebase/firestore";
 
 
 
@@ -70,6 +71,7 @@ const AddEntryForm = () => {
           username: formData.username,
           password: encryptedPassword,
           comments: formData.comments,
+          createdAt: serverTimestamp(),
         };
 
         await addDoc(userRef, userInfo);

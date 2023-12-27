@@ -26,6 +26,7 @@ import {
   DialogActions,
 } from "@mui/material";
 
+
 const drawerWidth = 240;
 
 function DrawerAppBar(props) {
@@ -54,6 +55,7 @@ function DrawerAppBar(props) {
 
   const handleConfirmLogout = async () => {
     try {
+  
       await signOut(auth);
       setUser(null);
       navigate("/");

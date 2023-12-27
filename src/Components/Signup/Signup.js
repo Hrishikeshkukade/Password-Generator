@@ -73,6 +73,7 @@ export default function Signup() {
 
       try {
         setIsLoading(true);
+        
         const userCredential = await createUserWithEmailAndPassword(
           auth,
 
