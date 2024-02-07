@@ -20,6 +20,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {IconButton, InputAdornment} from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useSelector } from "react-redux";
+
 
 const defaultTheme = createTheme();
 
@@ -33,6 +35,7 @@ export default function Signup() {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const darkMode = useSelector(state => state.theme.darkMode);
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -127,7 +130,7 @@ export default function Signup() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={darkMode}>
       <Container component="main" maxWidth="xs" sx={{ marginTop: "10%" }}>
         <CssBaseline />
 
@@ -263,7 +266,7 @@ export default function Signup() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme={darkMode ? "dark" : "light"}
       />
     </ThemeProvider>
   );

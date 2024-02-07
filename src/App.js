@@ -15,11 +15,27 @@ import ManagePasswords from "./Components/ManagePasswords/ManagePasswords";
 import AddPasswordForm from "./Components/AddPasswordForm/AddPasswordForm";
 import PasswordDetails from "./Components/PasswordDetails/PasswordDetails";
 import EditPasswordForm from "./Components/EditPasswordForm.js/EditPasswordForm";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { useSelector } from "react-redux";
+import { useTheme } from "@emotion/react";
+
+
 
 
 function App() {
   const user = useAuth();
   const [authenticatedUser, setAuthenticatedUser] = useState(null);
+  // const theme = useTheme();
+
+  const darkMode = useSelector(state => state.theme.darkMode);
+
+  const appTheme = createTheme({
+    // ...theme,
+    palette: {
+      // ...theme.palette,
+      mode: darkMode ? 'dark' : 'light',
+    },
+  });
 
   useEffect(() => {
     // Check the user's authentication state
@@ -44,8 +60,9 @@ function App() {
 
   return (
     <div className="App">
+      <ThemeProvider theme={appTheme}>
       <Routes>
-        <Route exact path="/" element={<SignIn />} />
+        <Route exact path="/" element={<SignIn theme={appTheme}/>} />
         <Route exact path="/signup" element={<Signup />} />
         <Route exact path="/fp" element={<ForgotPassword />} />
         {user && (
@@ -81,6 +98,8 @@ function App() {
             element={<ProtectedRoute element={<EditPasswordForm />} />}
           />
         )}
+       
+
            {/* {user && (
           <Route
             path="/updateprofileform"
@@ -89,6 +108,7 @@ function App() {
         )} */}
       </Routes>
       <Navbar />
+    </ThemeProvider>
     </div>
   );
 }

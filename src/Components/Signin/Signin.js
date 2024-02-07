@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -19,12 +19,12 @@ import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { ToastContainer } from "react-toastify";
 import { CircularProgress } from "@mui/material";
-import {IconButton,InputAdornment} from "@mui/material";
+import { IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-
-
+import { useSelector } from "react-redux";
 
 const defaultTheme = createTheme();
+
 
 export default function SignIn() {
   const validationSchema = Yup.object().shape({
@@ -35,6 +35,7 @@ export default function SignIn() {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const darkMode = useSelector(state => state.theme.darkMode);
 
   const navigate = useNavigate();
 
@@ -70,14 +71,13 @@ export default function SignIn() {
       }
       try {
         setIsLoading(true);
-        
+
         const userCredential = await signInWithEmailAndPassword(
           auth,
           values.email,
           values.password
         );
         const user = userCredential.user;
-       
 
         console.log("User signed in successfully:", user);
 
@@ -92,10 +92,9 @@ export default function SignIn() {
           toast.error("Incorrect Email or Password");
         } else if (error.code === "auth/wrong-password") {
           toast.error("Wrong password");
-        }
-        else {
+        } else {
           toast.error("Error signing in");
-        } 
+        }
       } finally {
         setIsLoading(false);
       }
@@ -104,12 +103,13 @@ export default function SignIn() {
 
   const handleTogglePasswordVisibility = () => {
     // Toggle the value of showPassword
-    formik.setFieldValue('showPassword', !formik.values.showPassword);
+    formik.setFieldValue("showPassword", !formik.values.showPassword);
   };
-  
+
+ 
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={darkMode}>
       <Container component="main" maxWidth="xs" sx={{ marginTop: "10%" }}>
         <CssBaseline />
         <Box
@@ -153,7 +153,7 @@ export default function SignIn() {
               fullWidth
               name="password"
               label="Password"
-              type={formik.values.showPassword ? 'text' : 'password'}
+              type={formik.values.showPassword ? "text" : "password"}
               id="password"
               autoComplete="current-password"
               color="secondary"
@@ -221,7 +221,6 @@ export default function SignIn() {
                   sx={{
                     "@media (max-width: 320px)": {
                       marginLeft: "40px",
-                      
                     },
                   }}
                 >
@@ -232,19 +231,18 @@ export default function SignIn() {
           </Box>
         </Box>
         <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme={darkMode ? "dark" : "light"}
+        />
       </Container>
-   
     </ThemeProvider>
   );
 }

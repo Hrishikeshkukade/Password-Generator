@@ -4,14 +4,12 @@ import {
   Paper,
   Container,
   CircularProgress,
-
+  IconButton,
   Box,
-  
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
 import { toast, ToastContainer } from "react-toastify";
-
 
 const Profile = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -30,7 +28,7 @@ const Profile = () => {
             email: user.email,
           });
         } else {
-          console.error("No user is currently signed in.");
+          toast.error("No user is currently signed in.");
         }
       } catch (error) {
         console.error("Error fetching user information:", error.message);
@@ -44,7 +42,9 @@ const Profile = () => {
     fetchUserInfo();
   }, []);
 
-
+  const handleEditEmail = () => {
+    navigate("/edit-email");
+  };
 
   return (
     <Container>
@@ -96,5 +96,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
-

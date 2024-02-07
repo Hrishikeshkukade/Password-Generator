@@ -15,11 +15,13 @@ import { sendPasswordResetEmail } from "firebase/auth";
 import { useState } from "react";
 import { CircularProgress } from "@mui/material";
 import { toast, ToastContainer } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const defaultTheme = createTheme();
 
 export default function ForgotPassword() {
   const [loading, setLoading] = useState(false);
+  const darkMode = useSelector(state => state.theme.darkMode);
 
   const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -49,7 +51,7 @@ export default function ForgotPassword() {
   });
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={darkMode}>
       <Container component="main" maxWidth="xs" sx={{ marginTop: "10%" }}>
         <CssBaseline />
         <Box

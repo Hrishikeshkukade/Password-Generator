@@ -17,7 +17,7 @@ import { toast} from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import { Edit, FileCopy as FileCopyIcon } from "@mui/icons-material";
 import { enc, AES } from "crypto-js/core";
-
+import { useSelector } from "react-redux";
 
 const PasswordDetails = () => {
   const { passwordId } = useParams();
@@ -27,6 +27,7 @@ const PasswordDetails = () => {
   const [copyField, setCopyField] = useState(""); // To track which field to copy
   const navigate = useNavigate();
   const mobileDevice = useMediaQuery("(max-width: 820px)");
+  const darkMode = useSelector(state => state.theme.darkMode);
 
 
 
@@ -49,7 +50,7 @@ const PasswordDetails = () => {
           setPasswordDetails({...details,password: decryptedPassword});
         } else {
           // Handle the case where the document does not exist
-          console.error("Password details not found");
+          toast.error("Password details not found");
         }
       } catch (error) {
         toast.error("Error fetching data");
@@ -140,6 +141,7 @@ const PasswordDetails = () => {
       </Paper>
       <Snackbar
         open={openSnackbar}
+       
         autoHideDuration={3000}
         onClose={handleCloseSnackbar}
         message={`Copied ${copyField.charAt(0).toUpperCase() + copyField.slice(1)}`}

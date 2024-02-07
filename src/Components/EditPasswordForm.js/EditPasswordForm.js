@@ -18,6 +18,7 @@ import { db } from "../../firebase";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import zxcvbn from "zxcvbn";
 import { enc, AES } from "crypto-js/core";
+import { ToastContainer, toast } from "react-toastify";
 
 const EditPasswordForm = () => {
   const { passwordId } = useParams();
@@ -45,10 +46,10 @@ const EditPasswordForm = () => {
           const decryptedPassword = AES.decrypt( details.password,'your-secret-key').toString(enc.Utf8);
           setFormData({...details,password: decryptedPassword});
         } else {
-          console.error("Password details not found");
+          toast.error("Password details not found");
         }
       } catch (error) {
-        console.error("Error fetching password details:", error.message);
+        toast.error("Error fetching password details:");
       }
     };
 
@@ -63,7 +64,7 @@ const EditPasswordForm = () => {
   };
 
   const handleUpdate = async () => {
-    if (!formData.title || !formData.username || !formData.password) {
+    if (!formData.title ||!formData.category || !formData.username || !formData.password) {
       setRequiredFieldsError(true);
       return;
     }
@@ -80,7 +81,7 @@ const EditPasswordForm = () => {
       // Redirect to the manage passwords page
       navigate("/managepasswords");
     } catch (error) {
-      console.error("Error updating password details:", error.message);
+      toast.error("Error updating password details:");
     } finally {
       setIsLoading(false);
     }
@@ -122,6 +123,12 @@ const EditPasswordForm = () => {
                   variant="outlined"
                   value={formData.category}
                   onChange={handleInputChange("category")}
+                  error={requiredFieldsError && !formData.category}
+                  helperText={
+                    requiredFieldsError &&
+                    !formData.category &&
+                    "Category is required"
+                  }
                 />
               </Grid>
               <Grid item xs={12}>
@@ -204,6 +211,18 @@ const EditPasswordForm = () => {
           </Paper>
         </Grid>
       </Grid>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </Container>
   );
 };

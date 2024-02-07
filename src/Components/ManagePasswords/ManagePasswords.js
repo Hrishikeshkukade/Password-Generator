@@ -66,7 +66,7 @@ const ManagePasswords = () => {
           setInfo(titleAndCategoryData);
         }
       } catch (error) {
-        toast.error("Error fetching data:");
+        toast.error("Error fetching data");
       } finally {
         // Set loading to false once the details are fetched (or failed to fetch)
         setLoading(false);
@@ -86,7 +86,7 @@ const ManagePasswords = () => {
     const newSelectedCategory =
       selectedValue === "without category" ? "all" : selectedValue;
     setSelectedCategory(newSelectedCategory);
-    console.log("clicked");
+   
   };
 
   const handleSortChange = (event) => {
@@ -97,7 +97,7 @@ const ManagePasswords = () => {
   const handleAddEntry = () => {
     // Implement logic to navigate to the Add Entry page
     navigate("/addpasswordform");
-    console.log("Add Entry clicked");
+   
   };
 
   const handlePasswordDetails = (passwordId) => {
@@ -118,7 +118,7 @@ const ManagePasswords = () => {
         prevInfo.filter((info) => info.id !== selectedPassword.id)
       );
     } catch (error) {
-      console.error("Error deleting password:", error.message);
+      toast.error("Error deleting password:");
     } finally {
       setDeletingId(null);
       setSelectedPassword(null);
@@ -185,7 +185,7 @@ const ManagePasswords = () => {
               margin="normal"
               value={sortBy}
               onChange={handleSortChange}
-              sx={{ width: "50%" }}
+              sx={{ width: "100%" }}
             >
               {/* <option value="title">Title</option>
               <option value="category">Category</option> */}
@@ -248,7 +248,7 @@ const ManagePasswords = () => {
         <Fab color="secondary" onClick={handleAddEntry}>
           <AddIcon />
         </Fab>
-      </Box>
+      </Box> 
       <Dialog
         open={openDeleteDialog}
         onClose={handleCancelDelete}

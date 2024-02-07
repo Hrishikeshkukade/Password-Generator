@@ -28,6 +28,8 @@ import {
 } from "../../config/Character";
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import { useSelector } from "react-redux";
+
 
 const PasswordGenerator = () => {
   const [password, setPassword] = useState("");
@@ -41,6 +43,7 @@ const PasswordGenerator = () => {
   const [error, setError] = useState(true);
   const desktop = useMediaQuery("(min-width:600px)");
   const galaxyFold = useMediaQuery("(max-width: 320px)");
+  const darkMode = useSelector(state => state.theme.darkMode);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -132,7 +135,7 @@ const PasswordGenerator = () => {
   }, [location, navigate]);
 
   return (
-    <Grid  container justifyContent="center" alignItems="center" height="100vh">
+    <Grid   container justifyContent="center" alignItems="center" height="100vh">
       <Grid  item xs={12} md={6}>
         <Box
           p={4}
@@ -141,6 +144,7 @@ const PasswordGenerator = () => {
           borderRadius={4}
           bgcolor="white"
           paddingBottom="50px"
+          sx={{ bgcolor: darkMode ? '#222' : '#fff' }}
         >
           <Typography variant="h4" align="center" gutterBottom>
             Password Generator

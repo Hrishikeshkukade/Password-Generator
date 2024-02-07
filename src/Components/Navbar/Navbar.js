@@ -25,6 +25,10 @@ import {
   DialogContentText,
   DialogActions,
 } from "@mui/material";
+import { useSelector, useDispatch } from 'react-redux';
+import Brightness4Icon from '@mui/icons-material/Brightness4'; // Moon icon
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { toggleTheme } from "../../store/themeSlice";
 
 
 const drawerWidth = 240;
@@ -55,7 +59,6 @@ function DrawerAppBar(props) {
 
   const handleConfirmLogout = async () => {
     try {
-  
       await signOut(auth);
       setUser(null);
       navigate("/");
@@ -97,6 +100,10 @@ function DrawerAppBar(props) {
   }, []);
 
   const isLoggedIn = auth.currentUser !== null;
+  const darkMode = useSelector(state => state.theme.darkMode);
+  const dispatch = useDispatch();
+
+  const themeToggleIcon = darkMode ? <Brightness7Icon /> : <Brightness4Icon />;
 
   if (loading) {
     return null;
@@ -172,7 +179,7 @@ function DrawerAppBar(props) {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar sx={{ bgcolor: "secondary.main" }} component="nav">
+      <AppBar  sx={{ bgcolor: darkMode ? '#222' : 'secondary.main' }} component="nav">
         <Toolbar>
           <IconButton
             color="inherit"
@@ -190,6 +197,9 @@ function DrawerAppBar(props) {
           >
             Password Generator
           </Typography>
+          <IconButton color="inherit" onClick={() => dispatch(toggleTheme())}>
+            {themeToggleIcon}
+          </IconButton>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navItems.map((item) => (
               <Button

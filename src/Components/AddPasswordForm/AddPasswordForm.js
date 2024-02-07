@@ -19,6 +19,8 @@ import { collection, addDoc } from "firebase/firestore";
 import zxcvbn from "zxcvbn";
 import {  AES } from 'crypto-js';
 import { serverTimestamp } from "firebase/firestore";
+import { toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 
 
@@ -49,7 +51,7 @@ const AddEntryForm = () => {
 
   const handleSave = async () => {
     // Check if required fields are filled
-    if (!formData.title || !formData.username || !formData.password) {
+    if (!formData.title ||!formData.category || !formData.username || !formData.password) {
       setRequiredFieldsError(true);
       return;
     }
@@ -80,7 +82,7 @@ const AddEntryForm = () => {
         navigate("/managepasswords");
       }
     } catch (error) {
-      console.error("Error saving data to Firestore:", error.message);
+      toast.error("Error saving data to Firestore:");
     } finally {
       setIsLoading(false);
     }
@@ -120,6 +122,12 @@ const AddEntryForm = () => {
               margin="normal"
               value={formData.category}
               onChange={handleInputChange("category")}
+              error={requiredFieldsError && !formData.category}
+              helperText={
+                requiredFieldsError &&
+                !formData.category &&
+                "Category is required"
+              }
             />
             <TextField
               required
@@ -209,6 +217,18 @@ const AddEntryForm = () => {
           </Paper>
         </Grid>
       </Grid>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </Container>
   );
 };
