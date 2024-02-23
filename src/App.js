@@ -22,6 +22,7 @@ import { useTheme } from "@emotion/react";
 
 
 
+
 function App() {
   const user = useAuth();
   const [authenticatedUser, setAuthenticatedUser] = useState(null);
@@ -98,14 +99,9 @@ function App() {
             element={<ProtectedRoute element={<EditPasswordForm />} />}
           />
         )}
-       
+         
 
-           {/* {user && (
-          <Route
-            path="/updateprofileform"
-            element={<ProtectedRoute element={<UpdateProfile/>} />}
-          />
-        )} */}
+         
       </Routes>
       <Navbar />
     </ThemeProvider>

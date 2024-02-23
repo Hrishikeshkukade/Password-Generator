@@ -4,7 +4,6 @@ import {
   Paper,
   Container,
   CircularProgress,
-  IconButton,
   Box,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -42,10 +41,6 @@ const Profile = () => {
     fetchUserInfo();
   }, []);
 
-  const handleEditEmail = () => {
-    navigate("/edit-email");
-  };
-
   return (
     <Container>
       <Box mt={10}>
@@ -66,16 +61,7 @@ const Profile = () => {
             <Typography variant="body1" color="textSecondary" gutterBottom>
               Email: {userInfo?.email || "No email available"}
             </Typography>
-            {/* <Tooltip title="Edit Profile" placement="top">
-              <Fab
-                color="secondary"
-                size="small"
-                style={{ position: "fixed", bottom: 16, right: 16 }}
-                onClick={handleEditProfile}
-              >
-                <EditIcon />
-              </Fab>
-            </Tooltip> */}
+          
           </Paper>
         )}
       </Box>

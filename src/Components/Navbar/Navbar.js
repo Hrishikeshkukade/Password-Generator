@@ -25,11 +25,10 @@ import {
   DialogContentText,
   DialogActions,
 } from "@mui/material";
-import { useSelector, useDispatch } from 'react-redux';
-import Brightness4Icon from '@mui/icons-material/Brightness4'; // Moon icon
-import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { useSelector, useDispatch } from "react-redux";
+import Brightness4Icon from "@mui/icons-material/Brightness4"; // Moon icon
+import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { toggleTheme } from "../../store/themeSlice";
-
 
 const drawerWidth = 240;
 
@@ -68,25 +67,6 @@ function DrawerAppBar(props) {
       console.error("Error during logout:", error);
     }
   };
-  // useEffect(() => {
-  //   const storedUser = JSON.parse(localStorage.getItem("authUser"));
-
-  //   if (storedUser) {
-  //     setUser(storedUser);
-  //   }
-
-  //   const unsubscribe = onAuthStateChanged(auth, (authUser) => {
-  //     setUser(authUser);
-
-  //     // Save user to local storage
-  //     localStorage.setItem("authUser", JSON.stringify(authUser));
-  //   });
-
-  //   return () => {
-  //     localStorage.removeItem("authUser");
-  //     unsubscribe();
-  //   };
-  // }, [auth]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
@@ -100,7 +80,7 @@ function DrawerAppBar(props) {
   }, []);
 
   const isLoggedIn = auth.currentUser !== null;
-  const darkMode = useSelector(state => state.theme.darkMode);
+  const darkMode = useSelector((state) => state.theme.darkMode);
   const dispatch = useDispatch();
 
   const themeToggleIcon = darkMode ? <Brightness7Icon /> : <Brightness4Icon />;
@@ -114,6 +94,7 @@ function DrawerAppBar(props) {
         { label: "Generate Password", path: "/passwordgenerator" },
         { label: "Manage Passwords", path: "/managepasswords" },
         { label: "Profile", path: "/profile" },
+        
       ]
     : [
         { label: "Signin", path: "/" },
@@ -179,7 +160,10 @@ function DrawerAppBar(props) {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar  sx={{ bgcolor: darkMode ? '#222' : 'secondary.main' }} component="nav">
+      <AppBar
+        sx={{ bgcolor: darkMode ? "#222" : "secondary.main" }}
+        component="nav"
+      >
         <Toolbar>
           <IconButton
             color="inherit"

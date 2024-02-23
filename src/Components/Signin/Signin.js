@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -20,11 +20,12 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { ToastContainer } from "react-toastify";
 import { CircularProgress } from "@mui/material";
 import { IconButton, InputAdornment } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Google, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useSelector } from "react-redux";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import GoogleSignin from "../GoogleSignin/GoogleSignin";
 
 const defaultTheme = createTheme();
-
 
 export default function SignIn() {
   const validationSchema = Yup.object().shape({
@@ -35,7 +36,7 @@ export default function SignIn() {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const darkMode = useSelector(state => state.theme.darkMode);
+  const darkMode = useSelector((state) => state.theme.darkMode);
 
   const navigate = useNavigate();
 
@@ -105,6 +106,8 @@ export default function SignIn() {
     // Toggle the value of showPassword
     formik.setFieldValue("showPassword", !formik.values.showPassword);
   };
+
+
 
  
 
@@ -199,6 +202,7 @@ export default function SignIn() {
                 "Sign In"
               )}
             </Button>
+
             <Grid container>
               <Grid item xs>
                 <Link
@@ -243,6 +247,8 @@ export default function SignIn() {
           theme={darkMode ? "dark" : "light"}
         />
       </Container>
+      <p>OR</p>
+     <GoogleSignin />
     </ThemeProvider>
   );
 }

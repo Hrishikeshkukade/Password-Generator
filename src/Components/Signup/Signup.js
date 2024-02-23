@@ -21,6 +21,7 @@ import "react-toastify/dist/ReactToastify.css";
 import {IconButton, InputAdornment} from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useSelector } from "react-redux";
+import GoogleSignin from "../GoogleSignin/GoogleSignin";
 
 
 const defaultTheme = createTheme();
@@ -268,6 +269,8 @@ export default function Signup() {
         pauseOnHover
         theme={darkMode ? "dark" : "light"}
       />
+      <p>OR</p>
+     <GoogleSignin />
     </ThemeProvider>
   );
 }
